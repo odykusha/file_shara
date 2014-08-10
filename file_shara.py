@@ -1,5 +1,4 @@
 #!/usr/local/bin/python3.3
-
 from flask import Flask, url_for, render_template, request, make_response
 from flask import redirect, abort
 from flask import send_from_directory
@@ -16,22 +15,16 @@ CURENT_FOLDER = os.getcwd()
 @app.route('/logs/')
 def view_logs():
     os.chdir(CURENT_FOLDER)
-    log_server = open('logs/server.log').read()
-    log_cron = open('logs/cron.log').read()
-    return render_template('log.html', 
-                           log_s=log_server, 
-                           log_c=log_cron)
-
-
-@app.route('/start/')
-def root():
-    if request.cookies.get('number_of_visites'):
-        con = int(request.cookies.get('number_of_visites')) + 1
+    try:
+        log_server = open('logs/server.log').read()
+        log_cron = open('logs/cron.log').read()
+    except FileNotFoundError:
+        return 'file logs/server.log or logs/cron.log not found'
     else:
-        con = 0
-    res = make_response(render_template('index.html', count = con))
-    res.set_cookie('number_of_visites', str(con))
-    return res
+        return render_template('log.html',
+                               log_s=log_server, 
+                               log_c=log_cron)
+
 
 @app.errorhandler(404)
 def err_not_found(error):
@@ -80,7 +73,6 @@ def delete(filename):
 
 #---------------------------------------------
 #---------- FUNCTIONS ------------------------
-
 def allowed_file(filename):    
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() not in NOT_ALLOWED_EXTENSIONS
@@ -126,7 +118,7 @@ def bytes2human(n):
             return '%.2f%s' % (value, s)
     return "%sB" % n
 
-	
+
 #---------------------------------------------
 if __name__ == "__main__":
 #    app.add_url_rule('/favicon.ico', redirect_to=url_for('static', filename='favicon.ico'))
