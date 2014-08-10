@@ -1,6 +1,6 @@
 # coniguration 
 
-HOST_IP = '0.0.0.0'  #'0.0.0.0' - all eth, for else use: '82.207.79.70'
+HOST_IP = '0.0.0.0'
 HOST_PORT = 80
 DEBUG = True
 
