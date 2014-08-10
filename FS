@@ -4,8 +4,9 @@
 #
 # chkconfig: 2345 90 10
 # description: Flask starter
-
 #set -xue
+`mkdir logs`
+
 Flask_PROC=`ps aux|grep python|grep file_shara|awk {'print $2'}|head -1`
 DATE=`date`
 
