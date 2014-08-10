@@ -1,7 +1,4 @@
 # coniguration 
-import os
-os.mkdir('logs')
-
 HOST_IP = '0.0.0.0'
 HOST_PORT = 80
 DEBUG = True
