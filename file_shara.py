@@ -23,22 +23,12 @@ def view_logs():
                            log_c=log_cron)
 
 
-    #pwd = os.path.join(os.getcwd(), 'logs')
-    #file = 'server.log'
-    #return 'folder: ' + pwd + file
-    #return send_from_directory(pwd, ff)
-
-
-
-
-
 @app.route('/start/')
 def root():
     if request.cookies.get('number_of_visites'):
         con = int(request.cookies.get('number_of_visites')) + 1
     else:
         con = 0
-
     res = make_response(render_template('index.html', count = con))
     res.set_cookie('number_of_visites', str(con))
     return res
@@ -136,8 +126,8 @@ def bytes2human(n):
             return '%.2f%s' % (value, s)
     return "%sB" % n
 
+	
 #---------------------------------------------
-    
 if __name__ == "__main__":
 #    app.add_url_rule('/favicon.ico', redirect_to=url_for('static', filename='favicon.ico'))
 #    app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 1024    
