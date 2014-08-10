@@ -1,0 +1,26 @@
+<!doctype html>
+<title>View logs</title>
+<body bgcolor='E0E0ea'>
+
+{% if log_s %}
+  <textarea name=pole cols=70 rows=30  wrap=Physical style="color: blue; background-color: F0F0F0">  
+  {{ log_s }}}
+  </textarea>
+{% else %}
+  <h1>not found server log</h1>
+{% endif %}
+
+<br>
+
+{% if log_c %}
+ <textarea name=pole2 cols=70 rows=30  wrap=Physical style="color: blue; background-color: F0F0F0">
+  {{ log_c }}}
+
+  </textarea>
+{% else %}
+  <h1>not found cron log</h1>
+{% endif %}
+
+
+
+</body>

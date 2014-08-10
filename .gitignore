@@ -34,3 +34,9 @@ Icon
 # Files that might appear on external disk
 .Spotlight-V100
 .Trashes
+
+*.log
+logs/server.log.1.gz
+logs/server.log.2
+logs/server.log.3
+__pycache__/config.cpython-33.pyc
