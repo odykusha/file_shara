@@ -46,9 +46,11 @@ case "$1" in
 			sleep 1
 			./FS start
 		;;
-			
+		gunicorn)
+   			gunicorn file_shara:app -b 0.0.0.0:80 -w 5 --timeout 7200 --log-file /export/home0/file_shara/gunicorn.log &
+		;;			
 		*)
-			echo "Usage: $0 {start|stop|restart|status}"
+			echo "Usage: $0 {start|stop|restart|gunicorn|status}"
 		;;
 esac
 exit

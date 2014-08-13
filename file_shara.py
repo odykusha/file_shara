@@ -3,32 +3,27 @@ from flask import Flask, url_for, render_template, request, make_response
 from flask import redirect, abort
 from flask import send_from_directory
 from werkzeug.utils import secure_filename
+from werkzeug.contrib.fixers import ProxyFix
 from datetime import datetime
 import os
 import glob
 import config
 
 app = Flask(__name__)
+app.wsgi_app = ProxyFix(app.wsgi_app)
 
-CURENT_FOLDER = os.getcwd()
-
-@app.route('/logs/')
-def view_logs():
-    os.chdir(CURENT_FOLDER)
-    try:
-        log_server = open('logs/server.log').read()
-        log_cron = open('logs/cron.log').read()
-    except FileNotFoundError:
-        return 'file logs/server.log or logs/cron.log not found'
-    else:
-        return render_template('log.html',
-                               log_s=log_server, 
-                               log_c=log_cron)
+UPLOAD_FOLDER = config.UPLOAD_FOLDER
+NOT_ALLOWED_EXTENSIONS = config.NOT_ALLOWED_EXTENSIONS
 
 
 @app.errorhandler(404)
 def err_not_found(error):
-    return 'WTF, %s, спробуй ще' % error
+    return 'WTF 404, %s, спробуй ще' % error
+
+
+@app.errorhandler(500)
+def err_server(error):
+    return 'WTF 500, %s' % error
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -62,9 +57,9 @@ def down():
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    #return UPLOAD_FOLDER + filename
     return send_from_directory(UPLOAD_FOLDER, filename)
 
+	
 @app.route('/delete/<filename>', methods=['POST'])
 def delete(filename):
     if os.path.exists(UPLOAD_FOLDER + '/' + filename):
@@ -77,7 +72,7 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() not in NOT_ALLOWED_EXTENSIONS
 
-
+		   
 def disk_usage(path):
     if hasattr(os, 'statvfs'):  # POSIX
         st = os.statvfs(path)
@@ -90,7 +85,6 @@ def disk_usage(path):
     elif os.name == 'nt':       # Windows
         import ctypes
         import sys
-
         _, total, free = ctypes.c_ulonglong(), ctypes.c_ulonglong(), \
                            ctypes.c_ulonglong() 
         if sys.version_info >= (3,) or isinstance(path, unicode):
@@ -118,15 +112,10 @@ def bytes2human(n):
             return '%.2f%s' % (value, s)
     return "%sB" % n
 
-
 #---------------------------------------------
 if __name__ == "__main__":
 #    app.add_url_rule('/favicon.ico', redirect_to=url_for('static', filename='favicon.ico'))
 #    app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 1024    
-
-    UPLOAD_FOLDER = config.UPLOAD_FOLDER
-    NOT_ALLOWED_EXTENSIONS = config.NOT_ALLOWED_EXTENSIONS
-    
     app.run(host=config.HOST_IP, 
             port=config.HOST_PORT, 
             debug=config.DEBUG)
