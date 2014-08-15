@@ -38,6 +38,7 @@ def down():
         if file and allowed_file(file.filename):
             filename = file.filename
             #filename = secure_filename(file.filename)
+            filename = valid_name(filename)
             file.save(os.path.join(UPLOAD_FOLDER, filename))
             return redirect('/')
         
@@ -72,7 +73,11 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() not in NOT_ALLOWED_EXTENSIONS
 
-		   
+def valid_name(filename):
+    new_filename = filename.replace('/', '_')
+    new_filename = new_filename.replace('\\', '_')
+    return new_filename
+
 def disk_usage(path):
     if hasattr(os, 'statvfs'):  # POSIX
         st = os.statvfs(path)
