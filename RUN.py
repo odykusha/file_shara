@@ -1,5 +1,6 @@
 from flask.ext.script import Manager
 from file_shara import app
+
 import config
 
 HOST_IP = config.HOST_IP
@@ -16,6 +17,7 @@ def run():
     app.run(host=HOST_IP,
             port=HOST_PORT)
 
+
 @manager.command
 def stop():
     "STOP APP"
@@ -24,6 +26,7 @@ def stop():
         del(app)
     except UnboundLocalError:
         print("NOT FOUND RUNNING APP, try again")
+
 
 @manager.command
 def hello(name):

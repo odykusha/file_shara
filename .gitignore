@@ -41,3 +41,5 @@ logs/server.log.2
 logs/server.log.3
 __pycache__/config.cpython-33.pyc
 *.pyc
+*.iml
+*.nja
